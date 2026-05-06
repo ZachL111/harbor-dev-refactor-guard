@@ -1,69 +1,40 @@
 # harbor-dev-refactor-guard
 
-`harbor-dev-refactor-guard` explores developer tools in Rust. The repository keeps the core rule set compact, then surrounds it with examples that show how the decisions move.
+`harbor-dev-refactor-guard` explores developer tools with a small Rust codebase and local fixtures. The technical goal is to build a Rust toolkit that studies refactor behavior through seeded input scenarios, with deterministic summary checks and bounded memory input sets.
 
-## Harbor Dev Refactor Guard Notes
+## Why It Exists
 
-The quickest review path is the verifier first, then the fixtures, then the operations note. That order makes it easy to see whether the code, data, and explanation still agree.
+The project exists to keep a narrow engineering decision visible and testable. For this repo, that decision is how change width and review cost should influence a review result.
 
-## Why This Exists
+## Harbor Dev Refactor Guard Review Notes
 
-This project keeps the domain idea close to the tests. That makes it useful as a reference implementation, a small experiment, or a starting point for a more specialized tool.
+`stress` and `baseline` are the cases worth reading first. They show the optimistic and cautious ends of the fixture.
 
-## Code Tour
+## Features
 
-- `src`: primary implementation
-- `tests`: verification harness
-- `fixtures`: compact golden scenarios
-- `examples`: expanded scenario set
-- `metadata`: project constants and verification metadata
-- `docs`: operations and extension notes
-- `scripts`: local verification and audit commands
-- `Cargo.toml`: Rust package metadata
+- `fixtures/domain_review.csv` adds cases for change width and diagnostic quality.
+- `metadata/domain-review.json` records the same cases in structured form.
+- `config/review-profile.json` captures the read order and the two review questions.
+- `examples/harbor-dev-refactor-walkthrough.md` walks through the case spread.
+- The Rust code includes a review path for `diagnostic quality` and `change width`.
+- `docs/field-notes.md` explains the strongest and weakest cases.
 
-## Feature Notes
+## Architecture Notes
 
-- Includes extended examples for safe defaults, including `recovery` and `degraded`.
-- Documents repeatable output tradeoffs in `docs/operations.md`.
-- Runs locally with a single verification command and no external credentials.
-- Stores project constants and verification metadata in `metadata/project.json`.
-- Adds a repository audit script that checks structure before running the language verifier.
+The implementation keeps the scoring rule plain: reward signal and confidence, preserve slack, penalize drag, then classify the result into a review lane.
 
-## Implementation Notes
+The added Rust path is deliberately direct, with fixtures doing most of the explaining.
 
-The design is intentionally direct: parse or construct a signal, score it, classify it, and verify the expected branch. This makes the repository useful for studying developer tools behavior without needing a service or database unless the language project itself is SQL. The Rust code keeps ownership and data movement plain, which makes the tests useful for checking both behavior and API shape.
-
-## Local Setup
-
-Use a normal shell with Rust available on `PATH`. The verifier is written as a PowerShell script because the portfolio was assembled on Windows.
-
-## Example Scenarios
-
-The examples are meant to be readable before they are exhaustive. They cover enough variation to show how latency and risk can pull a decision below the threshold.
-
-## Try It
+## Usage
 
 ```powershell
 powershell -NoProfile -ExecutionPolicy Bypass -File scripts/verify.ps1
 ```
 
-This runs the language-level build or test path against the compact fixture set.
-
 ## Tests
 
-```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File scripts/audit.ps1
-```
+The same command runs the local verification path. The highest-scoring domain case is `stress` at 240, which lands in `ship`. The most cautious case is `baseline` at 166, which lands in `ship`.
 
-The audit command checks repository structure and README constraints before it delegates to the verifier.
+## Limitations And Roadmap
 
-## Roadmap
-
-- Split the scoring constants into a typed configuration object and validate it before use.
-- Add a comparison mode that shows how decisions change when one signal is adjusted.
-- Add a loader for `examples/extended_cases.csv` and promote selected cases into the language test suite.
-- Add one more developer tools fixture that focuses on a malformed or borderline input.
-
-## Boundaries
-
-The repository favors determinism over breadth. It does not pull live data, keep secrets, or depend on network access for verification.
+The fixture set is small enough to audit by hand. The next useful expansion is malformed input coverage, not extra surface area.

@@ -1,0 +1,73 @@
+{
+  "repo": "harbor-dev-refactor-guard",
+  "language": "Rust",
+  "category": "Developer tools",
+  "goal": "Build a Rust toolkit that studies refactor behavior through seeded input scenarios, with deterministic summary checks and bounded memory input sets.",
+  "review_model": {
+    "terms": [
+      "change width",
+      "diagnostic quality",
+      "review cost",
+      "safe rewrite"
+    ],
+    "lanes": [
+      "ship",
+      "watch",
+      "hold"
+    ],
+    "score": "signal * 2 + slack + confidence - drag * 3",
+    "purpose": "surface the domain-specific cases that need the most careful review"
+  },
+  "cases": [
+    {
+      "name": "baseline",
+      "focus": "change width",
+      "signal": 55,
+      "slack": 48,
+      "drag": 17,
+      "confidence": 59,
+      "score": 166,
+      "lane": "ship"
+    },
+    {
+      "name": "stress",
+      "focus": "diagnostic quality",
+      "signal": 75,
+      "slack": 37,
+      "drag": 11,
+      "confidence": 86,
+      "score": 240,
+      "lane": "ship"
+    },
+    {
+      "name": "edge",
+      "focus": "review cost",
+      "signal": 80,
+      "slack": 36,
+      "drag": 30,
+      "confidence": 67,
+      "score": 173,
+      "lane": "ship"
+    },
+    {
+      "name": "recovery",
+      "focus": "safe rewrite",
+      "signal": 84,
+      "slack": 31,
+      "drag": 14,
+      "confidence": 50,
+      "score": 207,
+      "lane": "ship"
+    },
+    {
+      "name": "stale",
+      "focus": "change width",
+      "signal": 71,
+      "slack": 29,
+      "drag": 15,
+      "confidence": 58,
+      "score": 184,
+      "lane": "ship"
+    }
+  ]
+}
