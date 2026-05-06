@@ -1,0 +1,17 @@
+{
+  "repo": "harbor-dev-refactor-guard",
+  "thresholds": {
+    "signal": 3,
+    "slack": 1,
+    "confidence": 2,
+    "drag": 5,
+    "ship": 156,
+    "watch": 108
+  },
+  "terms": [
+    "change width",
+    "diagnostic quality",
+    "review cost",
+    "safe rewrite"
+  ]
+}
